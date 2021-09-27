@@ -15,5 +15,12 @@ public class Engine : MonoBehaviour
 		cam.FollowTarget(__player.transform);
 	}
 
+	public void SpawnEnemy(int x, int y)
+    {
+		GameObject enemyObject = Resources.Load<GameObject>("Prefabs/Enemy");
+		GameObject enemy = Instantiate(enemyObject, Vector3.zero, Quaternion.identity);
+		enemy.GetComponent<Entity>().reallocateEntity(x, y);
+	}
+
 
 }

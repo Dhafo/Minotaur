@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Unity.Mathematics;
 
 public class Entity : MonoBehaviour
 {
     public float moveSpeed = 4.75f;
     public bool isMoving = false;
     public Vector3 destination;
+    int pathIndex = 0;
 
     public void MoveEntity(string direction, bool isPlayer)
     {
@@ -45,6 +47,18 @@ public class Entity : MonoBehaviour
         transform.localPosition = new Vector3(ax + 0.5f, ay + 0.5f, 0);
     }
 
+    public void MoveByPath(List<int2> path, bool isPlayer)
+    {
+        Vector3Int startPos = new Vector3Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y), 0);
+        isMoving = true;
+        foreach(int2 node in path)
+        {
+            destination = new Vector3(node.x + .5f, node.y + .5f, 0);
+            StartCoroutine(MoveIfCan(isPlayer));
+        }
+    }
+   
+
     IEnumerator MoveIfCan(bool isPlayer)
     {
         Vector3 startPos = transform.position;
@@ -58,9 +72,7 @@ public class Entity : MonoBehaviour
                 PlayerFOV.instance.PlayerVisibility(new Vector3Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y), 0));
                 yield return null;
             }
-        }
-        t = 0f;
-        yield return new WaitForSeconds(.05f);
+        } 
         isMoving = false;
         yield return 0;
     }
