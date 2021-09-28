@@ -8,15 +8,12 @@ using Unity.Jobs;
 using Unity.Burst;
 
 public class Pathfinding : MonoBehaviour {
-
-    public GridGen grid;
-
     private const int MOVE_STRAIGHT_COST = 10;
 
     [BurstCompile]
     public List<int2> FindPath(int2 startPosition, int2 endPosition) {
 
-        int2 gridSize = new int2(grid.roomWidth, grid.roomHeight);
+        int2 gridSize = new int2(GameManager.__gridGen.roomWidth, GameManager.__gridGen.roomHeight);
 
         NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
@@ -31,7 +28,7 @@ public class Pathfinding : MonoBehaviour {
                 pathNode.hCost = CalculateDistanceCost(new int2(x, y), endPosition);
                 pathNode.CalculateFCost();
 
-                pathNode.isWalkable = (grid.grid[x, y] == GridGen.gridSpace.floor);
+                pathNode.isWalkable = (GameManager.__gridGen.grid[x, y] == GridGen.gridSpace.floor);
                 pathNode.cameFromNodeIndex = -1;
 
                 pathNodeArray[pathNode.index] = pathNode;
@@ -119,24 +116,23 @@ public class Pathfinding : MonoBehaviour {
         if (endNode.cameFromNodeIndex == -1) {
             // Didn't find a path!
             Debug.Log("Didn't find a path!");
+            pathNodeArray.Dispose();
+            neighbourOffsetArray.Dispose();
+            openList.Dispose();
+            closedList.Dispose();
             return new List<int2>();
         } else {
             // Found a path
             List<int2> path = CalculatePath(pathNodeArray, endNode);
             path.Reverse();
-            foreach (int2 pathPosition in path) {
-                Debug.Log(pathPosition);
-            }
+            pathNodeArray.Dispose();
+            neighbourOffsetArray.Dispose();
+            openList.Dispose();
+            closedList.Dispose();
             return path;
-        }
-
-        pathNodeArray.Dispose();
-        neighbourOffsetArray.Dispose();
-        openList.Dispose();
-        closedList.Dispose();
+        }   
     }
-
-        
+       
         private List<int2> CalculatePath(NativeArray<PathNode> pathNodeArray, PathNode endNode) {
             if (endNode.cameFromNodeIndex == -1) {
                 // Couldn't find a path!
@@ -151,6 +147,12 @@ public class Pathfinding : MonoBehaviour {
                     PathNode cameFromNode = pathNodeArray[currentNode.cameFromNodeIndex];
                     path.Add(new int2(cameFromNode.x, cameFromNode.y));
                     currentNode = cameFromNode;
+                    if(currentNode.cameFromNodeIndex == -1)
+                {
+                    path.Remove(new int2(currentNode.x, currentNode.y));
+                    break;
+                }
+               
                 }
 
                 return path;

@@ -9,7 +9,6 @@ using Unity.Mathematics;
 public class GridInteractive : MonoBehaviour
 {
     private Grid grid;
-    public GridGen gridGen;
     public Pathfinding pathfinder;
     [SerializeField] private Tilemap interactiveMap = null;
     [SerializeField] private Tile hoverTile = null;
@@ -38,16 +37,19 @@ public class GridInteractive : MonoBehaviour
             previousMousePos = mousePos;
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if(GameManager.__player.GetComponent<Entity>().turn == Entity.TurnState.OnTurn)
         {
-            Vector3Int startPos = new Vector3Int(Mathf.FloorToInt(Engine.__player.transform.position.x), Mathf.FloorToInt(Engine.__player.transform.position.y), 0);
-            Debug.Log("Start: " + startPos.ToString() + ", End: " + mousePos.ToString());
-            if(gridGen.grid[mousePos.x, mousePos.y] == GridGen.gridSpace.floor)
+            if (Input.GetMouseButtonDown(0))
             {
-                List<int2> path = pathfinder.FindPath(new int2(startPos.x, startPos.y), new int2(mousePos.x, mousePos.y));
-                Engine.__player.GetComponent<Entity>().MoveByPath(path, true);
+                Vector3Int startPos = new Vector3Int(Mathf.FloorToInt(GameManager.__player.transform.position.x), Mathf.FloorToInt(GameManager.__player.transform.position.y), 0);
+                if (GameManager.__gridGen.grid[mousePos.x, mousePos.y] == GridGen.gridSpace.floor)
+                {
+                    List<int2> path = pathfinder.FindPath(new int2(startPos.x, startPos.y), new int2(mousePos.x, mousePos.y));
+                    GameManager.__player.GetComponent<Entity>().AddPath(path);
+                }
             }
         }
+       
 
 
     }

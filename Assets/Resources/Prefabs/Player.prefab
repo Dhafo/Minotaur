@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5545874718434187829}
+  - component: {fileID: 3261570672210728990}
   - component: {fileID: 774993645775435290}
   - component: {fileID: 3176535139578144848}
   - component: {fileID: 6170933303410316331}
@@ -21,8 +21,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5545874718434187829
-Transform:
+--- !u!224 &3261570672210728990
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -35,6 +35,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 1, y: 1}
+  m_Pivot: {x: 1.5, y: 1.5}
 --- !u!212 &774993645775435290
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -85,7 +90,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!114 &3176535139578144848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,7 +103,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a9e359174ca8f4fa7d07048c1fcaec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4.75
+  isPlayer: 0
+  turn: 1
+  moveSpeed: 100
   isMoving: 0
   destination: {x: 0, y: 0, z: 0}
 --- !u!114 &6170933303410316331

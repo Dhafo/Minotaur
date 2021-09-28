@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class GridGen : MonoBehaviour
 {
-	public Engine engine;
+	public GameManager game;
 
     public static Tilemap __floorMap;
     public Tile floorTile;
@@ -47,8 +47,8 @@ public class GridGen : MonoBehaviour
 		CreateWalls();
 		RemoveSingleWalls();
 		SpawnLevel();
-		engine.SpawnPlayer(Mathf.RoundToInt(roomWidth/2.0f), Mathf.RoundToInt(roomHeight /2.0f));
-		SpawnEnemies();
+		//// spawn enemies and player
+		game.StartGame(roomWidth, roomHeight);
 	}
 
 	void Setup()
@@ -243,25 +243,6 @@ public class GridGen : MonoBehaviour
 		}
 	}
 
-	void SpawnEnemies()
-	{
-		int spawnCount = 3;
-		while (spawnCount != 0)
-		{
-			for (int x = 0; x < roomWidth; x++)
-			{
-				for (int y = 0; y < roomHeight; y++)
-				{
-					if (grid[x, y] == gridSpace.floor && Random.value > 0.99 && spawnCount != 0)
-					{
-						engine.SpawnEnemy(x, y);
-						spawnCount -= 1;
-					}
-				}
-			}
-			spawnCount = 0;
-		}
-	}
 		
 	Vector2 RandomDirection()
 	{
